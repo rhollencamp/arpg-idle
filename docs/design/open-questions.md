@@ -17,7 +17,7 @@ A running list. Move items into the relevant doc once they're decided.
 ## Tuning / smaller
 
 - Expedition length: is 5–10 min right? Should it be adjustable by policy
-  (oil loadout) from the start? *(Current answer: yes, oil is the knob.)*
+  (oil loadout) from the start? _(Current answer: yes, oil is the knob.)_
 - Siege warning time: how much real time between the warning and the wave?
   Too short feels unfair offline. Too long removes the tension.
 - Level cap and how fast XP comes, given permadeath.
@@ -31,17 +31,17 @@ A running list. Move items into the relevant doc once they're decided.
 
 ## Decided (log)
 
-| Decision | Choice |
-| --- | --- |
-| Theme | The Last Lighthouse: fog, light as the key resource |
-| Combat | Tick-based, fully simulated, structured event log |
-| Policies | Simple first (stances + retreat rules), gambits unlocked via the town tree |
-| Loot | Mostly supplies. Useful gear is rare. Rule-based salvage. |
-| Death | Permadeath for characters. The town can fall. |
-| Platform | TypeScript browser game, installable PWA, desktop-friendly, truly idle (offline catch-up) |
-| Expedition length | ~5–10 min, driven by oil loadout, policy-driven cadence later |
-| Lantern oil, Lamplighter, downed-before-dead, stances-as-gambits, telegraphed siege, sea trade (later) | Accepted |
-| Tech rules | Deterministic sim, separated from UI, seeded RNG, time passed in, headless balance harness |
-| Town falls | **Hard reset.** Game over, nothing carries over. |
-| Overworld | Siege camps + outposts as the core (iterate). Zone list in the MVP. |
-| People | **One pool.** Every refugee is a named character who can fight or work. |
+| Decision                                                                                               | Choice                                                                                     |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Theme                                                                                                  | The Last Lighthouse: fog, light as the key resource                                        |
+| Combat                                                                                                 | Tick-based, fully simulated, structured event log                                          |
+| Policies                                                                                               | Simple first (stances + retreat rules), gambits unlocked via the town tree                 |
+| Loot                                                                                                   | Mostly supplies. Useful gear is rare. Rule-based salvage.                                  |
+| Death                                                                                                  | Permadeath for characters. The town can fall.                                              |
+| Platform                                                                                               | TypeScript browser game, installable PWA, desktop-friendly, truly idle (offline catch-up)  |
+| Expedition length                                                                                      | ~5–10 min, driven by oil loadout, policy-driven cadence later                              |
+| Lantern oil, Lamplighter, downed-before-dead, stances-as-gambits, telegraphed siege, sea trade (later) | Accepted                                                                                   |
+| Tech rules                                                                                             | Deterministic sim, separated from UI, seeded RNG, time passed in, headless balance harness |
+| Town falls                                                                                             | **Hard reset.** Game over, nothing carries over.                                           |
+| Overworld                                                                                              | Siege camps + outposts as the core (iterate). Zone list in the MVP.                        |
+| People                                                                                                 | **One pool.** Every refugee is a named character who can fight or work.                    |

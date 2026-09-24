@@ -75,28 +75,28 @@ splitting the pool.
 
 ## Jobs (MVP)
 
-| Job | Produces / does | Background bonus |
-| --- | --- | --- |
-| **Forager/Fisher** | Food | Fisher, Herbalist |
-| **Oil press / Chandler** | Oil | Chandler |
-| **Scavenger** (near fog's edge) | Materials (low rate, small risk) | Mason, Smith |
-| **Builder** | Construction progress | Mason |
-| **Guard** | Town defense | Soldier, Warden archetype |
-| **Infirmary attendant** | Faster injury recovery, less medicine needed | Herbalist, Priest, Mender archetype |
-| **Rest** | Recovers HP faster, no output | — |
+| Job                             | Produces / does                              | Background bonus                    |
+| ------------------------------- | -------------------------------------------- | ----------------------------------- |
+| **Forager/Fisher**              | Food                                         | Fisher, Herbalist                   |
+| **Oil press / Chandler**        | Oil                                          | Chandler                            |
+| **Scavenger** (near fog's edge) | Materials (low rate, small risk)             | Mason, Smith                        |
+| **Builder**                     | Construction progress                        | Mason                               |
+| **Guard**                       | Town defense                                 | Soldier, Warden archetype           |
+| **Infirmary attendant**         | Faster injury recovery, less medicine needed | Herbalist, Priest, Mender archetype |
+| **Rest**                        | Recovers HP faster, no output                | —                                   |
 
 Output = base rate × (background bonus) × (building level). Keep the formulas
 simple enough that the player can see them.
 
 ## Buildings (MVP set)
 
-| Building | Purpose |
-| --- | --- |
-| **Lighthouse** | See above |
-| **Housing** | Population cap, which limits how many refugees can stay |
-| **Walls** | Base town defense. Can be damaged, repaired with materials. |
-| **Infirmary** | Recovery speed, capacity for injured characters |
-| **Workshop** | Salvage yield, stash size, later crafting/repairs |
+| Building       | Purpose                                                                         |
+| -------------- | ------------------------------------------------------------------------------- |
+| **Lighthouse** | See above                                                                       |
+| **Housing**    | Population cap, which limits how many refugees can stay                         |
+| **Walls**      | Base town defense. Can be damaged, repaired with materials.                     |
+| **Infirmary**  | Recovery speed, capacity for injured characters                                 |
+| **Workshop**   | Salvage yield, stash size, later crafting/repairs                               |
 | **Storehouse** | Resource caps (so production can't grow without limit while the player is away) |
 
 Buildings take **materials + builder time**. They level up, and there are
@@ -110,7 +110,7 @@ survive the town falling (hard reset). Points come from **milestones and relic s
 Example branches:
 
 - **Tactics:** unlocks policy tiers: targeting rules, consumable thresholds,
-  gambit slots and conditions. *This is where "deep policies" come from.*
+  gambit slots and conditions. _This is where "deep policies" come from._
 - **Logistics:** standing orders (auto-repeat expeditions), a second team,
   more carry capacity, oil efficiency.
 - **Hearth:** production bonuses, refugee draw, housing efficiency, morale.

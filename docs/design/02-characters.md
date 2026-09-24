@@ -5,17 +5,17 @@ shared pool: each person can go on expeditions, work a town job, or rest.
 
 ## Anatomy of a character
 
-| Part | Purpose |
-| --- | --- |
-| **Name, portrait, short bio** | Makes the log readable and losses hurt |
-| **Archetype** | Combat role and skill tree (see below) |
-| **Background** | What they did before the fog. Gives a town-job bonus and a small combat quirk |
-| **Attributes** | Might, Finesse, Wits, Resolve (see below) |
-| **Level / XP** | Earned on expeditions (and slowly from working a job?) |
-| **Skill tree** | Per archetype, small (a few branches, about 10 nodes in the MVP) |
-| **Equipment** | Weapon, Armor, Trinket (MVP: 3 slots) |
-| **Traits** | Permanent modifiers: injuries, quirks, fog-exposure effects |
-| **Condition** | HP, and a state such as *Ready / Injured / Recovering / Dead* |
+| Part                          | Purpose                                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| **Name, portrait, short bio** | Makes the log readable and losses hurt                                        |
+| **Archetype**                 | Combat role and skill tree (see below)                                        |
+| **Background**                | What they did before the fog. Gives a town-job bonus and a small combat quirk |
+| **Attributes**                | Might, Finesse, Wits, Resolve (see below)                                     |
+| **Level / XP**                | Earned on expeditions (and slowly from working a job?)                        |
+| **Skill tree**                | Per archetype, small (a few branches, about 10 nodes in the MVP)              |
+| **Equipment**                 | Weapon, Armor, Trinket (MVP: 3 slots)                                         |
+| **Traits**                    | Permanent modifiers: injuries, quirks, fog-exposure effects                   |
+| **Condition**                 | HP, and a state such as _Ready / Injured / Recovering / Dead_                 |
 
 ### Attributes
 
@@ -29,12 +29,12 @@ shared pool: each person can go on expeditions, work a town job, or rest.
 
 The names below fit the theme and are only placeholders.
 
-| Archetype | Role | Flavor |
-| --- | --- | --- |
-| *Warden* | Front line / tank | Shield and lantern pole. Holds the line. |
-| *Cutthroat* | Damage / skirmisher | Fast, fragile, strong against single targets |
-| *Lamplighter* | Caster / area damage | Burns oil to throw light. Strong against fog creatures. |
-| *Mender* | Support / healer | Bandages, tonics, keeping the downed alive |
+| Archetype     | Role                 | Flavor                                                  |
+| ------------- | -------------------- | ------------------------------------------------------- |
+| _Warden_      | Front line / tank    | Shield and lantern pole. Holds the line.                |
+| _Cutthroat_   | Damage / skirmisher  | Fast, fragile, strong against single targets            |
+| _Lamplighter_ | Caster / area damage | Burns oil to throw light. Strong against fog creatures. |
+| _Mender_      | Support / healer     | Bandages, tonics, keeping the downed alive              |
 
 The Lamplighter is the thematic hook: their abilities **spend the team's
 lantern oil**. Stronger fights cost you exploration time. Policies decide how
@@ -45,9 +45,9 @@ freely they spend it.
 A refugee's background is independent of their archetype. That's how you get
 "blacksmith who's also a Cutthroat."
 
-Examples: *Fisher* (+food from fishing), *Smith* (better salvage and repairs),
-*Chandler* (+oil production), *Mason* (+construction speed), *Herbalist*
-(+medicine), *Soldier* (+wall defense), *Priest* (+morale / recovery speed).
+Examples: _Fisher_ (+food from fishing), _Smith_ (better salvage and repairs),
+_Chandler_ (+oil production), _Mason_ (+construction speed), _Herbalist_
+(+medicine), _Soldier_ (+wall defense), _Priest_ (+morale / recovery speed).
 
 This gives you the "fight or work" choice: your best Chandler might also be
 your best Lamplighter.
@@ -61,19 +61,19 @@ When a character's HP reaches 0 in combat, they are **Downed**, not dead.
 - After the fight (or when the team retreats), every Downed character makes a
   **survival check**. Resolve, an active Mender, and medicine the team carries
   improve the odds.
-  - **Survive:** comes home *Injured*. May gain a lasting **injury trait**.
+  - **Survive:** comes home _Injured_. May gain a lasting **injury trait**.
   - **Fail:** dies. Their gear is lost unless a teammate carries it home
     (carry capacity).
 - **Rout** (see [Expeditions](04-expeditions.md)): a character left behind
-  during a rout is *Missing*. Missing people might turn up later as refugees,
+  during a rout is _Missing_. Missing people might turn up later as refugees,
   maybe changed. This is thematic, and it softens the pain a little.
 
 ### Injury & fog traits (examples)
 
-- *Lost an eye:* −accuracy
-- *Bad knee:* −speed
-- *Shaken:* uses a more defensive stance and retreats earlier
-- *Fog-touched:* sees in the murk (+ambush detection) but −HP recovery
+- _Lost an eye:_ −accuracy
+- _Bad knee:_ −speed
+- _Shaken:_ uses a more defensive stance and retreats earlier
+- _Fog-touched:_ sees in the murk (+ambush detection) but −HP recovery
 
 Recovering from an injury takes time in the **Infirmary**, and medicine and
 Menders working there speed it up. Permanent traits can later be removed

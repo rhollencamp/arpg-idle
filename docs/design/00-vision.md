@@ -32,7 +32,7 @@ carry, and how they behave out there. Then you watch the light and wait.
 
 3. **Light is the resource that matters.** Lantern oil sets how deep an
    expedition can go. The lighthouse's strength sets how far the fog stays
-   back and how many refugees find you. Progress should *feel* like pushing
+   back and how many refugees find you. Progress should _feel_ like pushing
    back the dark.
 
 4. **Losses are real, and they tell a story.** Permadeath applies to

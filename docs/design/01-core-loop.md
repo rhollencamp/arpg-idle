@@ -25,11 +25,11 @@ Two clocks run at the same time:
 
 ## Session shape
 
-| Session | What the player does |
-| --- | --- |
-| **Short check-in** (under 1 min) | Read the latest log, send the same team out again, reassign a job |
-| **Planning session** (5–15 min) | Rework the team and policies, spend skill points, build, handle item drops |
-| **Away** (hours) | The town keeps running. Only the expedition that was already out finishes. |
+| Session                          | What the player does                                                       |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| **Short check-in** (under 1 min) | Read the latest log, send the same team out again, reassign a job          |
+| **Planning session** (5–15 min)  | Rework the team and policies, spend skill points, build, handle item drops |
+| **Away** (hours)                 | The town keeps running. Only the expedition that was already out finishes. |
 
 ### While you're away
 
@@ -37,12 +37,12 @@ A truly idle game has to handle "the player is gone for 8 hours" well:
 
 - **MVP:** once the current expedition ends, the team comes home and rests.
   The town keeps producing and consuming, and the siege keeps coming. You come
-  back to one expedition log and a *town ledger* covering the time you were
+  back to one expedition log and a _town ledger_ covering the time you were
   gone.
 - **Later (policy-driven expedition cadence):** standing orders such as
   "keep sending this team out while everyone is above 60% HP and we have at
   least 3 oil," or "rotate teams A and B." These unlock through the town
-  skill tree. This is the real idle endgame: you manage a *process*, not
+  skill tree. This is the real idle endgame: you manage a _process_, not
   individual runs.
 
 ## Time scale

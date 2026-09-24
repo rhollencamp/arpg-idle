@@ -12,13 +12,13 @@ A zone is generated as a sequence of **nodes** of increasing **depth**:
 [Town] → ◇ → ⚔ → ⚔ → ☐ → ⚔ → ☠ → ⚔ → ...
 ```
 
-| Node | What happens |
-| --- | --- |
-| ⚔ Encounter | A fight. Difficulty and rewards grow with depth. |
-| ◇ Event | Short text events with an outcome decided by policy or stats (a stranded survivor, a strange shrine, a collapsed bridge) |
-| ☐ Cache | Supplies/loot. May be trapped (Wits check). |
-| ☠ Elite | A harder fight with better loot. Optional under *Cautious* push. |
-| ✦ Survivor | A refugee found in the fog. Escorting them home adds a person to the pool. |
+| Node        | What happens                                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------ |
+| ⚔ Encounter | A fight. Difficulty and rewards grow with depth.                                                                         |
+| ◇ Event     | Short text events with an outcome decided by policy or stats (a stranded survivor, a strange shrine, a collapsed bridge) |
+| ☐ Cache     | Supplies/loot. May be trapped (Wits check).                                                                              |
+| ☠ Elite     | A harder fight with better loot. Optional under _Cautious_ push.                                                         |
+| ✦ Survivor  | A refugee found in the fog. Escorting them home adds a person to the pool.                                               |
 
 After each node, the team checks its **retreat rules** (see
 [Combat & policies](03-combat-and-policies.md)) and either continues deeper
@@ -47,12 +47,12 @@ Roughly: 1 flask ≈ 1–2 minutes of real time out there. A standard loadout of
 
 ## Coming home
 
-| Outcome | Trigger | Result |
-| --- | --- | --- |
-| **Triumphant return** | Retreat rule reached at a planned point (oil, pack full, goal met) | Everything carried comes home |
-| **Retreat** | An in-fight retreat rule triggers | The team disengages (it may take a parting hit), then walks home. Keeps loot. |
-| **Rout** | The team is overwhelmed and fails its disengage check | Drops some loot. Downed members may be left behind (*Missing*). |
-| **Wipe** | Everyone is downed | Survival checks for everyone. Anyone who survives crawls home with nothing. It's possible nobody returns. |
+| Outcome               | Trigger                                                            | Result                                                                                                    |
+| --------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| **Triumphant return** | Retreat rule reached at a planned point (oil, pack full, goal met) | Everything carried comes home                                                                             |
+| **Retreat**           | An in-fight retreat rule triggers                                  | The team disengages (it may take a parting hit), then walks home. Keeps loot.                             |
+| **Rout**              | The team is overwhelmed and fails its disengage check              | Drops some loot. Downed members may be left behind (_Missing_).                                           |
+| **Wipe**              | Everyone is downed                                                 | Survival checks for everyone. Anyone who survives crawls home with nothing. It's possible nobody returns. |
 
 The walk home is not completely safe: there's a small ambush chance per
 cleared node, which goes up in low light.

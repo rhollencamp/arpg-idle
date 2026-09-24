@@ -6,10 +6,10 @@ is state changes plus an **event log** that becomes the expedition report.
 
 ## Combat model
 
-- **Tick = 1 sim-second.** Each combatant has an *action timer* (based on
+- **Tick = 1 sim-second.** Each combatant has an _action timer_ (based on
   Finesse and weapon speed). When the timer is ready, they choose an action
   according to their policy and perform it.
-- **Two rows per side:** *Front* and *Back*. Melee can only hit the enemy's
+- **Two rows per side:** _Front_ and _Back_. Melee can only hit the enemy's
   Front row while it still has someone standing. Ranged attacks and spells can
   hit anyone. This small amount of structure makes "protect the healer"
   meaningful.
@@ -34,27 +34,27 @@ they unlock through the town's **Keeper's tree**.
 
 Each character has a **stance**:
 
-| Stance | Effect |
-| --- | --- |
-| **Aggressive** | Prefers damage skills. Targets the lowest-HP enemy. +damage, −defense. Uses consumables late. |
-| **Balanced** | Default mix |
-| **Defensive** | Guards more often. Protects allies (Wardens draw attacks). Uses consumables early. +defense, −damage. |
+| Stance         | Effect                                                                                                |
+| -------------- | ----------------------------------------------------------------------------------------------------- |
+| **Aggressive** | Prefers damage skills. Targets the lowest-HP enemy. +damage, −defense. Uses consumables late.         |
+| **Balanced**   | Default mix                                                                                           |
+| **Defensive**  | Guards more often. Protects allies (Wardens draw attacks). Uses consumables early. +defense, −damage. |
 
 Plus **team-level retreat rules** (MVP):
 
-- Retreat from a fight when *team HP < X%* **or** *N members are Downed*
-- Head home when *oil < Y* **or** *any member is below Z% HP between fights*
-  **or** *the pack is full*
-- **Push depth:** a dial from *Cautious* to *Reckless* that sets how willing
+- Retreat from a fight when _team HP < X%_ **or** _N members are Downed_
+- Head home when _oil < Y_ **or** _any member is below Z% HP between fights_
+  **or** _the pack is full_
+- **Push depth:** a dial from _Cautious_ to _Reckless_ that sets how willing
   the team is to take on the next, harder encounter (see
   [Expeditions](04-expeditions.md))
 
 ### Tier 2: Targeting & resource rules (unlocked)
 
-- Target priority per character: *Lowest HP / Highest threat / Casters first /
-  Same as the Warden*
+- Target priority per character: _Lowest HP / Highest threat / Casters first /
+  Same as the Warden_
 - Consumable thresholds: "drink a tonic below 40% HP"
-- Oil budget for the Lamplighter: *Frugal / Normal / Blaze*
+- Oil budget for the Lamplighter: _Frugal / Normal / Blaze_
 
 ### Tier 3: Gambits (unlocked, late)
 
@@ -72,7 +72,7 @@ to FF12:
 - The number of gambit **slots** and available **conditions/actions** are
   both unlocked through the Keeper's tree, so gambits keep growing over time.
 - Stances in Tier 1 are really just **preset gambit lists**. That keeps the
-  engine unified: *everything is gambits under the hood*, and Tiers 1–2 are
+  engine unified: _everything is gambits under the hood_, and Tiers 1–2 are
   simpler views of it.
 
 ## Things to watch
@@ -80,6 +80,6 @@ to FF12:
 - Policies have to produce **visibly different outcomes**, or the whole
   premise fails. Test for it: the same team with different stances should
   show clearly different rates of wins, injuries, and oil spent.
-- The log should *explain policy decisions* sometimes ("Bram, holding the
+- The log should _explain policy decisions_ sometimes ("Bram, holding the
   line as ordered, took the blow meant for Ysolde"). That's how players learn
   that their policies matter.
