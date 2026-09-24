@@ -1,7 +1,7 @@
 # Overworld
 
-> Status: **mostly still open.** We know there's a map with fog and a home
-> base. What the player *does* on it is still undecided.
+> Status: **direction chosen, details still to be worked out.** Siege camps and
+> outposts are the core. We'll iterate from there.
 
 ## What we know
 
@@ -35,9 +35,16 @@ Not mutually exclusive. We should pick 1–2 for the first version after the MVP
 6. **Fog advance:** if the light weakens, the fog **takes tiles back**:
    outposts go dark and discoveries are lost. A cost to neglect you can see.
 
-## Suggested direction
+## Direction (decided, will iterate)
 
-MVP: **option 1 as a simple list** (one or two zones).
-Next version: turn it into a real map with **2 (outposts) + 3 (siege camps) +
-6 (fog advance)**. Together they make the map a push-and-pull territory game
-that ties straight into the town's light and siege systems.
+- **MVP:** option 1 as a **simple list** (one or two zones). No map yet.
+- **Next version:** a real map built around **2 (outposts)** and
+  **3 (siege camps)**:
+  - *Siege camps* connect expeditions to town defense: clearing a camp lowers
+    siege pressure.
+  - *Outposts* are territory: lighting them extends the cleared area and adds
+    staging points, but they cost oil to keep burning.
+  - Both come back to the oil tension. Every outpost is another fire to feed.
+- **Candidates for later:** 6 (fog advance) pairs naturally with outposts
+  (neglected outposts go dark). 4 (refugee signals) and 5 (landmarks) add
+  variety and story.

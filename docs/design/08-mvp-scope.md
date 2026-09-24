@@ -39,8 +39,8 @@ tension over oil, people, and the siege.
 - Refugee arrivals (driven by brightness and housing)
 - Siege: pressure → a telegraphed wave → resolved against defense (a simple
   numbers contest is fine for the MVP)
-- Town fall is **possible**. The MVP can simply show a "the light went out"
-  screen with a restart. The roguelite carry-over can come later.
+- Town fall is **possible**, and it's a **hard reset**: a "the light went
+  out" screen with a final ledger, then a new game.
 - A minimal Keeper's tree: just enough to prove the unlock path (e.g., one
   Tactics node that unlocks target priority)
 
@@ -56,8 +56,6 @@ tension over oil, people, and the siege.
 - Tier 2/3 policies beyond the one proof-of-concept unlock
 - Standing orders / auto-repeat expeditions / multiple teams
 - Trade, ships, crafting, gear durability, morale
-- Townsfolk vs. heroes split
-- Roguelite meta-progression after the town falls
 - Push notifications
 - Art beyond simple portraits/icons. Audio.
 - Cloud save, accounts, any server

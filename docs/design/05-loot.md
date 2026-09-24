@@ -11,7 +11,7 @@ Two kinds of things come home:
 
 | Resource | Used for |
 | --- | --- |
-| **Food** | Feeding the townsfolk. Refugees need it. |
+| **Food** | Feeding everyone in town. Refugees need it. |
 | **Oil** | The lighthouse, expedition lanterns, Lamplighter skills |
 | **Materials** (timber/stone/scrap, possibly combined into one in the MVP) | Buildings, walls, repairs |
 | **Medicine** | Survival checks on expeditions, recovery in the Infirmary |

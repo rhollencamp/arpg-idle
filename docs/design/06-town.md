@@ -30,31 +30,39 @@ The things in the fog press against the town.
   ahead of time**, with a countdown (in the MVP, at least ~30–60 minutes of
   real-time warning). The fog visibly thickens.
 - A wave is resolved against **town defense** = walls + guards (characters
-  and townsfolk assigned to the wall) + brightness bonus. It could be
+  assigned to the wall) + brightness bonus. It could be
   simulated with the same combat engine, where guards fight at the wall, or
   as a simpler contest of numbers in the MVP.
 - **Outcomes:** repelled (pressure resets and maybe a small loot drop) /
-  breached (buildings damaged, townsfolk killed, resources lost) / **fallen**.
+  breached (buildings damaged, people killed, resources lost) / **fallen**.
 
 ### The town falls
 
 Permadeath applies to the town. If defense collapses (for example, a wave
 breaks through while the walls are already breached, or the town is
-completely out of people), **the town falls**. What that means is an
-[open question](open-questions.md). The leading idea is a **roguelite
-reset**: the Keeper escapes with the flame and lights a new lighthouse
-somewhere else. Some things carry over (Keeper's tree knowledge, a few
-relics, maybe a survivor or two), and the world and roster start over.
+completely out of people), **the town falls**.
 
-## People: townsfolk vs. heroes
+**A fallen town is a hard reset.** The game is over. Nothing carries over:
+no Keeper's tree, no relics, no survivors. You start a new game.
 
-MVP proposal: **one pool.** Every refugee is a full character (archetype +
-background) who can fight or work. This keeps pillar 2 simple and strong.
+This means:
 
-A possible later split for scale: large numbers of anonymous **townsfolk**
-work jobs, while named **heroes** are the ones you can send out. Named
-characters can still work jobs, and it's their background that gives the
-bonus.
+- The stakes are as high as they can get, so the **fairness rule** is
+  essential: waves are always telegraphed, and the town sends clear warnings
+  as it gets weaker (low oil, breached walls, no guards). A fall should look
+  predictable in hindsight.
+- A good "the light went out" screen matters: a final ledger of how long the
+  light burned, who was saved, and who was lost. It's the run's epitaph.
+- Save export/import lets a determined player back up the game and undo a
+  fall. It's single-player, so we accept that and don't try to stop it.
+
+## People: one pool
+
+**Decided: one pool.** Every refugee is a full, named character (archetype +
+background) who can fight or work. There's no separate class of anonymous
+townsfolk. This keeps pillar 2 simple and strong. If population numbers ever
+get too large to manage, solve it with UI (grouping, job presets), not by
+splitting the pool.
 
 ### Refugees
 
@@ -96,8 +104,8 @@ only a few levels in the MVP.
 
 ## The Keeper's tree (town skill tree)
 
-The long-term progress that survives when characters die (and maybe a town
-reset). Points come from **milestones and relic shards**, not from grinding.
+The long-term progress that survives when characters die. It does **not**
+survive the town falling (hard reset). Points come from **milestones and relic shards**, not from grinding.
 
 Example branches:
 

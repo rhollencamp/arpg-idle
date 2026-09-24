@@ -36,7 +36,8 @@ carry, and how they behave out there. Then you watch the light and wait.
    back the dark.
 
 4. **Losses are real, and they tell a story.** Permadeath applies to
-   characters and to the town itself. Losses should make sense after the fact
+   characters and to the town itself. A fallen town is a hard reset. Losses
+   should make sense after the fact
    ("I sent them out with half a flask of oil") and should never feel random
    or unfair.
 
