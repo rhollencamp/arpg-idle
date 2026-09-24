@@ -1,0 +1,71 @@
+/* Mantine owns the look of the app; this file is only for what a theme object
+   cannot express. Keep it small — prefer theme tokens and component props. */
+
+/* Mantine defines its own scheme variables at :root[data-mantine-color-scheme],
+   so an override has to match that specificity to win. */
+:root[data-mantine-color-scheme='light'] {
+  /* Mantine points the page and the card background at the same `white`, and
+     the design wants the cards to lift off the page. The dark scheme needs no
+     equivalent: its surfaces come from the `dark` ramp in theme.ts, which
+     already separates the two. */
+  --mantine-color-body: #f3f4f6;
+  --app-header-bg: #ffffff;
+  --app-progress-track: #d8dde3;
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  /* The card surface and the border tone from the dark ramp in theme.ts. */
+  --app-header-bg: #222c37;
+  --app-progress-track: #374452;
+}
+
+/* `svh` is the viewport with the browser's retractable chrome shown, so a tab
+   gets a page exactly as tall as what is visible rather than one that
+   rubber-bands under a toolbar that is not there yet. */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+/* An installed app has no such chrome, and the dynamic units misreport on its
+   cold start — which is every launch on iOS, where a backgrounded PWA is
+   killed rather than suspended. A shell that opens a status bar short of the
+   screen ends the document there, and the strip below it is the page's own
+   background: the band that shows under any screen whose content is shorter than
+   the screen.
+
+   `vh` is the unit that reads correctly from a cold start, so standalone takes
+   it. Not both at once — `max()` of the two would hand a tab the taller
+   figure, which is the rubber-band the rule above exists to avoid. */
+@media (display-mode: standalone) {
+  .app-shell {
+    min-height: 100vh;
+  }
+}
+
+/* Opaque and sticky, both deliberately: Safari 26 tints the iOS status bar
+   from whatever fixed or sticky element it finds at the top of the viewport,
+   reading that element's `background-color` and `backdrop-filter`. Given a
+   flat colour it extends the colour upward; given a translucent or blurred
+   one it falls back to a glass treatment that blurs the top of the app.
+
+   `viewport-fit=cover` in index.html lets the page run into whatever the
+   device does not consider safe — the notch, and the home indicator. Pad the
+   bar itself rather than its inner container, so the background still spans
+   full-bleed under the status bar. */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding-top: env(safe-area-inset-top);
+  background-color: var(--app-header-bg);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+/* The home-indicator gutter on an installed iOS PWA. A bare spacer rather
+   than padding on the main container, so a scrolling page still ends flush
+   against the bottom of the safe area. */
+.app-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

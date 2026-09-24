@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="theme-color"
+      content="#161d25"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#10171b"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Guttered" />
+    <meta
+      name="description"
+      content="An idle game: keep the last lighthouse burning and send your people into the fog."
+    />
+    <title>Guttered</title>
+    <script>
+      // Mantine switches on data-mantine-color-scheme rather than a media
+      // query. Set it inline, before first paint, to avoid a flash of the
+      // light theme on a dark device. This mirrors Mantine's own
+      // <ColorSchemeScript>, which cannot run early enough in a client-only
+      // app: the storage key and "auto" handling must stay in step with the
+      // defaultColorScheme passed to MantineProvider in src/App.tsx.
+      ;(function () {
+        var query = window.matchMedia('(prefers-color-scheme: dark)')
+        var apply = function () {
+          var stored
+          try {
+            stored = window.localStorage.getItem('mantine-color-scheme-value')
+          } catch (e) {
+            stored = null
+          }
+          // Dark unless the player chose otherwise: a stored "auto" follows
+          // the device, anything else missing falls back to the default.
+          var scheme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : stored === 'auto'
+                ? query.matches
+                  ? 'dark'
+                  : 'light'
+                : 'dark'
+          document.documentElement.setAttribute(
+            'data-mantine-color-scheme',
+            scheme,
+          )
+        }
+        apply()
+        query.addEventListener('change', apply)
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
