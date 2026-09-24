@@ -24,17 +24,30 @@ play with and tune:
   every 8 min (taking one in costs 10 supplies), a roster cap of 8, and a
   list of the fallen.
 - **Reports** with a structured log, plus a "while you were away" summary.
-- **The lighthouse** burns oil at a setting you choose (low, steady,
-  bright). Brighter light draws refugees faster and slows the siege, but
-  drinks from the same store as the expeditions. When the oil runs dry the
-  light goes out: nobody arrives, and siege pressure builds 3× as fast.
-  It relights once the press has made 1 flask.
-- **The siege:** pressure builds to a wave, which is announced with a
-  30-minute countdown. Defense = (walls + people at home, weighted by
-  health) × light. A repelled wave chips the walls and leaves supplies to
-  scavenge. A wave that breaks through damages the walls and carries off
-  supplies. If the walls can't take the blow, the town falls: a hard reset
-  with a final screen.
+- **The lighthouse** burns oil at a setting you choose: low (0.15
+  flasks/min), steady (0.3) or bright (0.45). The press makes 0.4. The light
+  draws everything in, survivors and monsters alike:
+
+  |                       | low       | steady   | bright   | out (no oil) |
+  | --------------------- | --------- | -------- | -------- | ------------ |
+  | Refugees              | every 12m | every 8m | every 5m | none         |
+  | Waves come            | ×0.6      | ×1       | ×1.6     | ×0.6         |
+  | Warning before a wave | 10m       | 30m      | 50m      | none         |
+  | Defenders fight at    | ×0.9      | ×1       | ×1.15    | ×0.75        |
+  | Teams walk home at    | ×0.67     | ×1       | ×1.25    | ×0.5         |
+
+  When the oil runs dry the light goes out. It relights once the press has
+  made 1 flask. The walking pace applies second by second, so turning the
+  light up helps a team that's already heading home.
+
+- **The siege:** pressure builds to a wave. The wave's warning is set by
+  the light at the moment it's sighted, and its strength by the time since
+  the founding (25 × 1.13 per hour), so a dim light means fewer fights but
+  not easier ones. Defense = (walls × 0.2 + people at home, weighted by
+  health) × the light's multiplier. A repelled wave chips the walls and
+  leaves supplies to scavenge. A wave that breaks through damages the walls
+  and carries off supplies. If the walls can't take the blow, the town
+  falls: a hard reset with a final screen.
 - **Walls:** repair (1 supply → 3 points) and reinforce (+50, costing
   30 × level). This is the main supply sink for now.
 - **Not built yet:** loot/gear, jobs, buildings, character progression, the
@@ -42,17 +55,15 @@ play with and tune:
 
 First-pass balance (`npm run sim:town`, 24 h per run):
 
-- A town nobody tends falls in about 12 h.
-- Building walls without sending expeditions lasts about 19 h.
-- A bot that sends expeditions and builds survives the full 24 h at low or
-  steady light.
-- Running bright light constantly while sending expeditions keeps drying
-  out the lamp and falls in about 15 h.
-- Waves grow 15% each, so without character progression every town falls
-  eventually.
-
-Tuning lives in `src/game/rules.ts` and `src/game/content.ts`. `npm run sim`
-shows how each plan tends to go.
+- A town nobody tends falls in about 10–11 h.
+- Building walls without sending expeditions lasts about 18 h.
+- A bot that sends expeditions and builds survives the full 24 h at low
+  light (about 18 waves) or steady light (about 20).
+- Bright light all the time falls in about 19 h: more waves, and less oil
+  left for expeditions. Its advantages (refugees, longer warning) are
+  capped by the roster limit, or need a player to act on them. It's a
+  setting for a moment, not one to leave on.
+- Without character progression every town falls eventually.
 
 ## In (full MVP)
 

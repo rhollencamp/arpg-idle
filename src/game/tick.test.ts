@@ -85,6 +85,21 @@ describe('advanceTo', () => {
     }
   })
 
+  it('brings a team home slower under a dim light', () => {
+    const out = sendEveryone(createInitialState(START))
+    const walkHome = (brightness: 'low' | 'bright') => {
+      let state: GameState = { ...out, brightness, oil: 20 }
+      state = advanceTo(state, START + 60 * 60 * 1000)
+      const log = state.reports[0].log
+      const turned = log.find(
+        (event) => event.kind === 'turnBack' || event.kind === 'retreat',
+      )
+      return log.at(-1)!.t - (turned?.t ?? 0)
+    }
+
+    expect(walkHome('low')).toBeGreaterThan(walkHome('bright'))
+  })
+
   it('brings refugees to the gate on a clock', () => {
     const state = advanceTo(
       createInitialState(START),

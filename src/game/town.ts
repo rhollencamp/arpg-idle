@@ -198,10 +198,13 @@ export function pressureRate(state: GameState): number {
 }
 
 function sightWave(draft: GameState): void {
-  const strength = waveStrength(draft.siege.waves)
+  const strength = waveStrength(draft.elapsed)
   draft.siege.pressure = 0
-  draft.siege.wave = { strength, countdown: WAVE_WARNING_SECONDS }
+  const countdown = WAVE_WARNING_SECONDS[lightLevel(draft)]
+  draft.siege.wave = { strength, countdown }
   log(draft, { t: draft.elapsed, kind: 'waveSighted', strength })
+  // With the light out nobody sees it coming: it is on the walls at once.
+  if (countdown <= 0) breakWave(draft)
 }
 
 export interface Defense {

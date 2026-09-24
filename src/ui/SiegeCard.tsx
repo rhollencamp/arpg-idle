@@ -14,9 +14,13 @@ import {
   repairCost,
   repairWalls,
 } from '../game/actions'
-import { PRESSURE_MAX, reinforceCost } from '../game/rules'
+import {
+  PRESSURE_MAX,
+  WAVE_WARNING_SECONDS,
+  reinforceCost,
+} from '../game/rules'
 import { formatClock, formatSpan } from '../game/summary'
-import { defenseOf, pressureRate } from '../game/town'
+import { defenseOf, lightLevel, pressureRate } from '../game/town'
 import type { GameState } from '../game/types'
 
 type Apply = (change: (state: GameState) => GameState) => void
@@ -35,6 +39,7 @@ export function SiegeCard({
   const holding = wave ? defense.total >= wave.strength : true
   const untilSighting = (PRESSURE_MAX - siege.pressure) / pressureRate(state)
   const cost = repairCost(state)
+  const warning = WAVE_WARNING_SECONDS[lightLevel(state)]
   const wallShare = walls.integrity / walls.max
 
   return (
@@ -77,8 +82,10 @@ export function SiegeCard({
               />
             </Progress.Root>
             <Text size="xs" c="dimmed">
-              When it fills, a wave is sighted — then you have 30 minutes to get
-              ready.
+              When it fills, a wave is sighted.{' '}
+              {warning > 0
+                ? `At this light you would have ${formatSpan(warning)} to get ready.`
+                : 'With the light out, it would be on the walls before anyone saw it.'}
             </Text>
           </>
         )}

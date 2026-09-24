@@ -76,8 +76,25 @@ export const LIGHT_PER_FLASK = 90
 /** Seconds to walk from one node to the next, going out. */
 export const TRAVEL_SECONDS = 30
 
-/** Seconds per node of depth to walk home through ground already cleared. */
+/**
+ * Seconds per node of depth to walk home through ground already cleared,
+ * under a steady light. The lighthouse is what guides a team home: see
+ * `RETURN_PACE`.
+ */
 export const RETURN_SECONDS_PER_DEPTH = 10
+
+/**
+ * How fast a team walking home covers ground at each light level, as a
+ * share of the steady pace. In a dim light they lose their way; with it out,
+ * they grope home in the dark. Applied second by second, so turning the
+ * light up helps a team already on its way.
+ */
+export const RETURN_PACE: Readonly<Record<LightLevel, number>> = {
+  out: 0.5,
+  low: 0.67,
+  steady: 1,
+  bright: 1.25,
+}
 
 /**
  * HP a standing member gets back per second on the road between fights. A
@@ -142,7 +159,7 @@ export type LightLevel = Brightness | 'out'
 export const LIGHT_BURN_PER_SECOND: Readonly<Record<Brightness, number>> = {
   low: 0.15 / 60,
   steady: 0.3 / 60,
-  bright: 0.6 / 60,
+  bright: 0.45 / 60,
 }
 
 /**
@@ -168,31 +185,44 @@ export const PRESSURE_MAX = 100
 /** Pressure gained per second under a steady light: a wave every 40 minutes. */
 export const PRESSURE_PER_SECOND = PRESSURE_MAX / (40 * 60)
 
-/** How much faster the fog presses in at each light level. */
+/**
+ * How fast the fog gathers at each light level. The light draws everything
+ * in, the things in the fog as surely as the survivors: the brighter it
+ * burns, the more often a wave comes.
+ */
 export const PRESSURE_MULTIPLIER: Readonly<Record<LightLevel, number>> = {
-  out: 3,
-  low: 1.5,
+  out: 0.6,
+  low: 0.6,
   steady: 1,
-  bright: 0.6,
+  bright: 1.6,
 }
 
 /**
  * Seconds of warning between a wave being sighted and it breaking on the
- * walls. Long enough that a player who checks in now and then always gets a
- * chance to answer it — the town may fall while you are away, but never
- * without warning.
+ * walls, set by the light at the moment it is sighted: a bright light shows
+ * it coming from far out in the fog. With the light out there is no warning
+ * at all — the wave is on the walls before anyone sees it.
  */
-export const WAVE_WARNING_SECONDS = 30 * 60
+export const WAVE_WARNING_SECONDS: Readonly<Record<LightLevel, number>> = {
+  out: 0,
+  low: 10 * 60,
+  steady: 30 * 60,
+  bright: 50 * 60,
+}
 
-/** How hard wave number `index` (0-based) hits. */
-export function waveStrength(index: number): number {
-  return Math.round(25 * 1.15 ** index)
+/**
+ * How hard a wave sighted `elapsed` seconds after the founding hits. Tied to
+ * the clock rather than to how many waves have come, so a dim light buys
+ * fewer fights, not easier ones.
+ */
+export function waveStrength(elapsed: number): number {
+  return Math.round(25 * 1.13 ** (elapsed / 3600))
 }
 
 /** Defense each wall point is worth. */
 export const WALL_DEFENSE_PER_POINT = 0.2
 
-/** How well defenders fight at each light level. */
+/** How well defenders fight at each light level: they need to see. */
 export const LIGHT_DEFENSE: Readonly<Record<LightLevel, number>> = {
   out: 0.75,
   low: 0.9,

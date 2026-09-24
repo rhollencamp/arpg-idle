@@ -11,9 +11,12 @@ import {
 import { setBrightness } from '../game/actions'
 import {
   LIGHT_BURN_PER_SECOND,
+  LIGHT_DEFENSE,
   OIL_CAP,
   PRESSURE_MULTIPLIER,
   RELIGHT_AT,
+  RETURN_PACE,
+  WAVE_WARNING_SECONDS,
 } from '../game/rules'
 import { formatSpan } from '../game/summary'
 import { lightLevel, oilRate, refugeeInterval } from '../game/town'
@@ -27,6 +30,17 @@ const LEVEL_LABEL = {
   steady: 'Steady',
   bright: 'Bright',
 } as const
+
+function Effect({ label, value }: { label: string; value: string }) {
+  return (
+    <Group justify="space-between" wrap="nowrap">
+      <Text size="sm">{label}</Text>
+      <Text size="sm" ff="monospace">
+        {value}
+      </Text>
+    </Group>
+  )
+}
 
 /** The lamp: how bright it burns, what that costs, and what it buys. */
 export function LighthouseCard({
@@ -65,19 +79,40 @@ export function LighthouseCard({
           ]}
         />
         <Text size="sm" c="dimmed">
-          Burns {burn.toFixed(2)} flasks a minute.{' '}
-          {level === 'out'
-            ? `It relights once the press has made ${RELIGHT_AT} flask.`
-            : `Siege pressure ×${PRESSURE_MULTIPLIER[level]}${
-                interval !== null
-                  ? `; someone finds the light every ${formatSpan(interval)}.`
-                  : '.'
-              }`}
+          The light draws everything in: the lost, and the things that hunt
+          them. Burns {burn.toFixed(2)} flasks a minute.
         </Text>
+        <Stack gap={2}>
+          <Effect
+            label="Refugees"
+            value={interval !== null ? `every ${formatSpan(interval)}` : 'none'}
+          />
+          <Effect
+            label="Waves come"
+            value={`×${PRESSURE_MULTIPLIER[level]} as often`}
+          />
+          <Effect
+            label="Warning before a wave"
+            value={
+              WAVE_WARNING_SECONDS[level] > 0
+                ? formatSpan(WAVE_WARNING_SECONDS[level])
+                : 'none'
+            }
+          />
+          <Effect
+            label="Defenders fight at"
+            value={`×${LIGHT_DEFENSE[level]}`}
+          />
+          <Effect
+            label="Teams find their way home at"
+            value={`×${RETURN_PACE[level]} pace`}
+          />
+        </Stack>
         {level === 'out' && (
           <Text size="sm" c="red">
-            The light is out. Nobody can find the town, and the fog presses in
-            three times as fast.
+            The light is out. Nobody can find the town, a wave would be on the
+            walls before anyone saw it, and teams in the fog grope home blind.
+            It relights once the press has made {RELIGHT_AT} flask.
           </Text>
         )}
       </Stack>

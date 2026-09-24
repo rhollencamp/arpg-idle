@@ -5,6 +5,7 @@ import {
   MAX_ENEMIES,
 } from './content'
 import { createRng } from './rng'
+import { lightLevel } from './town'
 import {
   ATTACK_SECONDS,
   DARK_DAMAGE_PER_SECOND,
@@ -13,6 +14,7 @@ import {
   MAX_LOG_EVENTS,
   MAX_REPORTS,
   PUSH_MARGIN,
+  RETURN_PACE,
   RETURN_SECONDS_PER_DEPTH,
   STANCE,
   TRAVEL_HEAL_PER_SECOND,
@@ -67,7 +69,9 @@ export function expeditionStep(draft: GameState): void {
       fightStep(draft, exp, members, exp.phase.enemies, rng)
       break
     case 'returning':
-      exp.phase.remaining -= 1
+      // `remaining` is measured at a steady light's pace; the lighthouse
+      // decides how much of it each second covers.
+      exp.phase.remaining -= RETURN_PACE[lightLevel(draft)]
       if (exp.phase.remaining <= 0) comeHome(draft, exp, rng)
       break
   }
@@ -305,7 +309,8 @@ function win(
   const needed =
     TRAVEL_SECONDS +
     FIGHT_ESTIMATE_SECONDS +
-    (exp.depth + 1) * RETURN_SECONDS_PER_DEPTH +
+    ((exp.depth + 1) * RETURN_SECONDS_PER_DEPTH) /
+      RETURN_PACE[lightLevel(draft)] +
     PUSH_MARGIN[exp.policy.push]
 
   if (hurt || exp.light < needed) {

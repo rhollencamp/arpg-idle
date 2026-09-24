@@ -40,7 +40,7 @@ describe('the lighthouse', () => {
   it('goes out when the oil runs dry, and relights once the press catches up', () => {
     const state = advanceTo(
       town({ brightness: 'bright', oil: 0.5 }),
-      START + 10 * 60 * 1000,
+      START + 30 * 60 * 1000,
     )
     const kinds = state.townLog.map((event) => event.kind)
 
@@ -79,10 +79,67 @@ describe('the siege', () => {
     townStep(state, PRESSURE_MAX / PRESSURE_PER_SECOND)
 
     expect(state.siege.wave).toEqual({
-      strength: waveStrength(0),
-      countdown: WAVE_WARNING_SECONDS,
+      strength: waveStrength(state.elapsed),
+      countdown: WAVE_WARNING_SECONDS.steady,
     })
     expect(state.townLog.at(-1)?.kind).toBe('waveSighted')
+  })
+
+  it('brings waves more often under a bright light, and shows them sooner', () => {
+    const day = START + 24 * HOUR
+    const bright = advanceTo(town({ brightness: 'bright', oil: 1e6 }), day)
+    const low = advanceTo(town({ brightness: 'low' }), day)
+
+    expect(bright.siege.waves).toBeGreaterThan(low.siege.waves)
+    expect(WAVE_WARNING_SECONDS.bright).toBeGreaterThan(
+      WAVE_WARNING_SECONDS.low,
+    )
+  })
+
+  it('gives no warning at all with the light out', () => {
+    const state = town({
+      lightOut: true,
+      oil: 0,
+      siege: {
+        pressure: PRESSURE_MAX - 0.001,
+        wave: null,
+        waves: 0,
+        repelled: 0,
+      },
+    })
+    townStep(state, 60)
+
+    const kinds = state.townLog.map((event) => event.kind)
+    expect(kinds).toContain('waveSighted')
+    expect(state.siege.waves).toBe(1)
+    expect(state.siege.wave).toBeNull()
+  })
+
+  it('sets a wave by the clock, not by how many came before', () => {
+    expect(waveStrength(10 * 3600)).toBeGreaterThan(waveStrength(0))
+
+    const early = town({
+      elapsed: 5 * 3600,
+      siege: {
+        pressure: PRESSURE_MAX - 0.001,
+        wave: null,
+        waves: 0,
+        repelled: 0,
+      },
+    })
+    const veteran = town({
+      elapsed: 5 * 3600,
+      siege: {
+        pressure: PRESSURE_MAX - 0.001,
+        wave: null,
+        waves: 9,
+        repelled: 9,
+      },
+    })
+    townStep(early, 1)
+    townStep(veteran, 1)
+
+    expect(early.siege.wave?.strength).toBe(veteran.siege.wave?.strength)
   })
 
   it('throws back a wave the defense can match, and scavenges from it', () => {
