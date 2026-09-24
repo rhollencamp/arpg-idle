@@ -24,8 +24,32 @@ play with and tune:
   every 8 min (taking one in costs 10 supplies), a roster cap of 8, and a
   list of the fallen.
 - **Reports** with a structured log, plus a "while you were away" summary.
-- **Not built yet:** the lighthouse burning oil, the siege and the town
-  falling, loot/gear, jobs, buildings, the Keeper's tree.
+- **The lighthouse** burns oil at a setting you choose (low, steady,
+  bright). Brighter light draws refugees faster and slows the siege, but
+  drinks from the same store as the expeditions. When the oil runs dry the
+  light goes out: nobody arrives, and siege pressure builds 3× as fast.
+  It relights once the press has made 1 flask.
+- **The siege:** pressure builds to a wave, which is announced with a
+  30-minute countdown. Defense = (walls + people at home, weighted by
+  health) × light. A repelled wave chips the walls and leaves supplies to
+  scavenge. A wave that breaks through damages the walls and carries off
+  supplies. If the walls can't take the blow, the town falls: a hard reset
+  with a final screen.
+- **Walls:** repair (1 supply → 3 points) and reinforce (+50, costing
+  30 × level). This is the main supply sink for now.
+- **Not built yet:** loot/gear, jobs, buildings, character progression, the
+  Keeper's tree, standing orders.
+
+First-pass balance (`npm run sim:town`, 24 h per run):
+
+- A town nobody tends falls in about 12 h.
+- Building walls without sending expeditions lasts about 19 h.
+- A bot that sends expeditions and builds survives the full 24 h at low or
+  steady light.
+- Running bright light constantly while sending expeditions keeps drying
+  out the lamp and falls in about 15 h.
+- Waves grow 15% each, so without character progression every town falls
+  eventually.
 
 Tuning lives in `src/game/rules.ts` and `src/game/content.ts`. `npm run sim`
 shows how each plan tends to go.

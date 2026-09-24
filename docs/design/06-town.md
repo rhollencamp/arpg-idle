@@ -5,6 +5,9 @@ go (and die). The town is what you're really building, and what can be lost.
 
 ## The lighthouse
 
+> v0 status: brightness, light-out, siege, walls and the fall are built. See
+> [MVP scope](08-mvp-scope.md#v0-whats-built-now) for the numbers.
+
 The center of everything. It has two numbers:
 
 - **Brightness:** how much oil it burns per town step. Brighter light means:

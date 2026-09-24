@@ -19,6 +19,12 @@ function draftFrom(state: GameState): GameState {
     gate: [...state.gate],
     fallen: [...state.fallen],
     reports: [...state.reports],
+    townLog: [...state.townLog],
+    siege: {
+      ...state.siege,
+      wave: state.siege.wave && { ...state.siege.wave },
+    },
+    walls: { ...state.walls },
     expedition: state.expedition && cloneExpedition(state.expedition),
   }
 }
@@ -45,10 +51,10 @@ function cloneExpedition(exp: Expedition): Expedition {
  * Advances `state` to `now` in whole one-second steps.
  *
  * While an expedition is out, every second is simulated, because combat is
- * tick by tick. Once nobody is out, the town is all that is left and its rules
- * are plain accumulations (`town.ts`), so whatever time remains is settled in
- * one call. An absence of a week costs an expedition's worth of steps plus
- * one, not 600,000.
+ * tick by tick. Once nobody is out, the town is all that is left, and it runs
+ * event to event (`town.ts`), so whatever time remains is settled in one call.
+ * An absence of a week costs an expedition's worth of steps plus one call
+ * per town event, not 600,000 steps.
  *
  * Only whole steps are consumed and `lastTick` moves by exactly that much, so
  * the result depends on elapsed time alone, not on how it was split into calls.
@@ -56,15 +62,19 @@ function cloneExpedition(exp: Expedition): Expedition {
 export function advanceTo(state: GameState, now: number): GameState {
   const steps = Math.floor((now - state.lastTick) / STEP_MS)
   if (steps < 1) return state
+  // A fallen town is over. Time still passes, but nothing happens in it.
+  if (state.lost) {
+    return { ...state, lastTick: state.lastTick + steps * STEP_MS }
+  }
 
   const draft = draftFrom(state)
   let done = 0
-  while (done < steps && draft.expedition) {
+  while (done < steps && draft.expedition && !draft.lost) {
     expeditionStep(draft)
     townStep(draft, 1)
     done += 1
   }
-  if (done < steps) townStep(draft, steps - done)
+  if (done < steps && !draft.lost) townStep(draft, steps - done)
 
   draft.lastTick = state.lastTick + steps * STEP_MS
   return draft

@@ -40,6 +40,63 @@ export interface Fallen {
   depth: number
 }
 
+/** How brightly the lighthouse is set to burn. */
+export type Brightness = 'low' | 'steady' | 'bright'
+
+/**
+ * One line of the town's ledger. `t` is seconds since the town was founded
+ * (`GameState.elapsed`), so the ledger reads the same however the time was
+ * simulated.
+ */
+export type TownEvent =
+  | { t: number; kind: 'lightOut' }
+  | { t: number; kind: 'relit' }
+  | { t: number; kind: 'arrived'; name: string }
+  | { t: number; kind: 'waveSighted'; strength: number }
+  | {
+      t: number
+      kind: 'repelled'
+      strength: number
+      defense: number
+      spoils: number
+    }
+  | {
+      t: number
+      kind: 'breached'
+      strength: number
+      defense: number
+      wallDamage: number
+      suppliesLost: number
+    }
+  | { t: number; kind: 'fell'; strength: number; defense: number }
+
+export interface Siege {
+  /** Builds toward `PRESSURE_MAX`, which sets a wave in motion. */
+  pressure: number
+  /** The wave on its way, if one has been sighted. */
+  wave: { strength: number; countdown: number } | null
+  /** Waves that have broken on the town, thrown back or not. */
+  waves: number
+  repelled: number
+}
+
+export interface Walls {
+  integrity: number
+  max: number
+  /** Times reinforced, starting from 1. Sets the next reinforcement's cost. */
+  level: number
+}
+
+/** How it ended. Set once, when the town falls; the save is then read-only. */
+export interface Lost {
+  /** Seconds the light burned. */
+  elapsed: number
+  waves: number
+  repelled: number
+  takenIn: number
+  expeditions: number
+}
+
 /** How hard a team fights. Applies to the whole team for now. */
 export type Stance = 'aggressive' | 'balanced' | 'defensive'
 
@@ -164,8 +221,8 @@ export interface GameState {
   supplies: number
   roster: Character[]
   gate: Refugee[]
-  /** Seconds toward the next refugee reaching the gate. */
-  refugeeClock: number
+  /** Progress toward the next refugee reaching the gate, in [0, 1). */
+  refugeeProgress: number
   /** How many refugees have ever arrived; also their RNG step index. */
   refugeesArrived: number
   nextCharacterId: number
@@ -176,4 +233,16 @@ export interface GameState {
   nextExpeditionId: number
   /** Newest first. */
   reports: Report[]
+  /** Seconds since the town was founded. The town's own clock. */
+  elapsed: number
+  brightness: Brightness
+  /** The oil ran dry. Stays out until the press refills `RELIGHT_AT`. */
+  lightOut: boolean
+  siege: Siege
+  walls: Walls
+  /** Refugees ever taken in. */
+  takenIn: number
+  /** Oldest first, capped. */
+  townLog: TownEvent[]
+  lost: Lost | null
 }

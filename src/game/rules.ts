@@ -1,4 +1,4 @@
-import type { Character, Policy, Push, Stance } from './types'
+import type { Brightness, Character, Policy, Push, Stance } from './types'
 
 /**
  * Every tuning number in one place, so balancing is an edit to this file and
@@ -112,13 +112,13 @@ export const OIL_SECONDS_PER_FLASK = 150
 /** The press stops once the store holds this much. Loot can carry it higher. */
 export const OIL_CAP = 20
 
-/** Seconds between refugees reaching the gate. */
-export const REFUGEE_SECONDS = 8 * 60
-
 /** Refugees who will wait at the gate at once. The clock stops while it is full. */
 export const GATE_CAP = 3
 
 export const ROSTER_CAP = 8
+
+/** Lines kept in the town's ledger. */
+export const MAX_TOWN_LOG = 60
 
 /** Supplies it costs to take a refugee in. */
 export const TAKE_IN_COST = 10
@@ -128,4 +128,93 @@ export function canBeSent(
   away: ReadonlySet<number>,
 ): boolean {
   return !away.has(character.id) && !character.injured && character.hp > 0
+}
+
+// ── The lighthouse ──────────────────────────────────────────────────────────
+
+/**
+ * How the light is burning. `out` is not a setting the player picks: it is
+ * what any setting becomes once the oil runs dry.
+ */
+export type LightLevel = Brightness | 'out'
+
+/** Flasks the lamp burns per second at each setting. */
+export const LIGHT_BURN_PER_SECOND: Readonly<Record<Brightness, number>> = {
+  low: 0.15 / 60,
+  steady: 0.3 / 60,
+  bright: 0.6 / 60,
+}
+
+/**
+ * Once the light has gone out it relights on its own when the press has put
+ * this much back in the store, so the lamp does not flicker on and off on
+ * every drop the press gives it.
+ */
+export const RELIGHT_AT = 1
+
+/** Seconds between refugees reaching the gate; `null` means nobody comes. */
+export const REFUGEE_SECONDS: Readonly<Record<LightLevel, number | null>> = {
+  out: null,
+  low: 12 * 60,
+  steady: 8 * 60,
+  bright: 5 * 60,
+}
+
+// ── The siege ───────────────────────────────────────────────────────────────
+
+/** Siege pressure that sets a wave in motion. */
+export const PRESSURE_MAX = 100
+
+/** Pressure gained per second under a steady light: a wave every 40 minutes. */
+export const PRESSURE_PER_SECOND = PRESSURE_MAX / (40 * 60)
+
+/** How much faster the fog presses in at each light level. */
+export const PRESSURE_MULTIPLIER: Readonly<Record<LightLevel, number>> = {
+  out: 3,
+  low: 1.5,
+  steady: 1,
+  bright: 0.6,
+}
+
+/**
+ * Seconds of warning between a wave being sighted and it breaking on the
+ * walls. Long enough that a player who checks in now and then always gets a
+ * chance to answer it — the town may fall while you are away, but never
+ * without warning.
+ */
+export const WAVE_WARNING_SECONDS = 30 * 60
+
+/** How hard wave number `index` (0-based) hits. */
+export function waveStrength(index: number): number {
+  return Math.round(25 * 1.15 ** index)
+}
+
+/** Defense each wall point is worth. */
+export const WALL_DEFENSE_PER_POINT = 0.2
+
+/** How well defenders fight at each light level. */
+export const LIGHT_DEFENSE: Readonly<Record<LightLevel, number>> = {
+  out: 0.75,
+  low: 0.9,
+  steady: 1,
+  bright: 1.15,
+}
+
+/** Share of a wave's strength the walls soak up even when it is thrown back. */
+export const WAVE_CHIP = 0.15
+
+/** Supplies scavenged from a wave that was thrown back, per point of strength. */
+export const WAVE_SPOILS = 0.25
+
+export const WALL_START = 100
+
+/** Wall points one supply repairs. */
+export const WALL_REPAIR_PER_SUPPLY = 3
+
+/** Wall points each reinforcement adds to the maximum (and to the wall). */
+export const WALL_REINFORCE_POINTS = 50
+
+/** Supplies to reinforce the walls from level `level` to the next. */
+export function reinforceCost(level: number): number {
+  return 30 * level
 }

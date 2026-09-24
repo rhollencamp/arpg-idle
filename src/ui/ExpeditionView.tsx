@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {
+  Alert,
   Badge,
   Button,
   Card,
@@ -16,6 +17,7 @@ import {
 import { awayIds, canDepart, depart, setPolicy } from '../game/actions'
 import { LIGHT_PER_FLASK, MAX_FLASKS, MAX_TEAM, canBeSent } from '../game/rules'
 import { formatClock } from '../game/summary'
+import { defenseOf } from '../game/town'
 import type {
   Expedition,
   GameState,
@@ -94,6 +96,9 @@ function PlanExpedition({
 
   const ready = canDepart(state, team, plan)
   const last = state.reports[0]
+  const wave = state.siege.wave
+  const defenseLeft = defenseOf(state, team).total
+  const oilLeft = state.oil - flasks
 
   return (
     <Stack gap="md">
@@ -231,6 +236,34 @@ function PlanExpedition({
           </div>
         </Stack>
       </Card>
+
+      {team.length > 0 && (
+        <Alert
+          variant="light"
+          color={
+            wave && defenseLeft < wave.strength
+              ? 'red'
+              : oilLeft < 1
+                ? 'lamp'
+                : 'gray'
+          }
+        >
+          <Text size="sm">
+            {wave
+              ? `A wave (strength ${wave.strength}) arrives in ${formatClock(
+                  wave.countdown,
+                )}. With this team away, the town's defense is ${Math.round(
+                  defenseLeft,
+                )}${defenseLeft < wave.strength ? ' — not enough.' : '.'}`
+              : `With this team away, the town's defense is ${Math.round(
+                  defenseLeft,
+                )}. No wave has been sighted yet.`}{' '}
+            {oilLeft < 1
+              ? 'Taking this much oil leaves the lamp dry — the light will go out.'
+              : `Leaves ${oilLeft.toFixed(1)} flasks for the lamp.`}
+          </Text>
+        </Alert>
+      )}
 
       <Button
         size="md"

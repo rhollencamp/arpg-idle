@@ -5,10 +5,13 @@ import {
   ROSTER_CAP,
   TAKE_IN_COST,
   TRAVEL_SECONDS,
+  WALL_REINFORCE_POINTS,
+  WALL_REPAIR_PER_SUPPLY,
   canBeSent,
   maxHp,
+  reinforceCost,
 } from './rules'
-import type { GameState, Policy } from './types'
+import type { Brightness, GameState, Policy } from './types'
 
 /**
  * The player's moves. Each is a pure function that returns a new state, or
@@ -25,7 +28,7 @@ export function canDepart(
   memberIds: readonly number[],
   policy: Policy,
 ): boolean {
-  if (state.expedition) return false
+  if (state.expedition || state.lost) return false
   if (memberIds.length < 1 || memberIds.length > MAX_TEAM) return false
   if (new Set(memberIds).size !== memberIds.length) return false
   if (policy.flasks < 1 || policy.flasks > MAX_FLASKS) return false
@@ -74,7 +77,11 @@ export function depart(
 }
 
 export function canTakeIn(state: GameState): boolean {
-  return state.supplies >= TAKE_IN_COST && state.roster.length < ROSTER_CAP
+  return (
+    !state.lost &&
+    state.supplies >= TAKE_IN_COST &&
+    state.roster.length < ROSTER_CAP
+  )
 }
 
 /** Opens the gate to a refugee. They arrive at full health. */
@@ -85,6 +92,7 @@ export function takeIn(state: GameState, refugeeId: number): GameState {
   return {
     ...state,
     supplies: state.supplies - TAKE_IN_COST,
+    takenIn: state.takenIn + 1,
     gate: state.gate.filter((entry) => entry.id !== refugeeId),
     roster: [
       ...state.roster,
@@ -94,7 +102,9 @@ export function takeIn(state: GameState, refugeeId: number): GameState {
 }
 
 export function turnAway(state: GameState, refugeeId: number): GameState {
-  if (!state.gate.some((entry) => entry.id === refugeeId)) return state
+  if (state.lost || !state.gate.some((entry) => entry.id === refugeeId)) {
+    return state
+  }
   return {
     ...state,
     gate: state.gate.filter((entry) => entry.id !== refugeeId),
@@ -104,4 +114,58 @@ export function turnAway(state: GameState, refugeeId: number): GameState {
 /** Remembers the plan between expeditions without sending anyone. */
 export function setPolicy(state: GameState, policy: Policy): GameState {
   return { ...state, policy }
+}
+
+/** Turns the lamp up or down. Takes effect at once, even while it is out. */
+export function setBrightness(
+  state: GameState,
+  brightness: Brightness,
+): GameState {
+  if (state.lost || state.brightness === brightness) return state
+  return { ...state, brightness }
+}
+
+/** Supplies a full repair of the walls would cost right now. */
+export function repairCost(state: GameState): number {
+  return Math.ceil(
+    (state.walls.max - state.walls.integrity) / WALL_REPAIR_PER_SUPPLY,
+  )
+}
+
+/**
+ * Patches the walls with whatever supplies there are, up to fully repaired.
+ * A partial repair is still a repair: a player with 5 supplies gets 15 points.
+ */
+export function repairWalls(state: GameState): GameState {
+  const spend = Math.min(state.supplies, repairCost(state))
+  if (state.lost || spend <= 0) return state
+  return {
+    ...state,
+    supplies: state.supplies - spend,
+    walls: {
+      ...state.walls,
+      integrity: Math.min(
+        state.walls.max,
+        state.walls.integrity + spend * WALL_REPAIR_PER_SUPPLY,
+      ),
+    },
+  }
+}
+
+export function canReinforce(state: GameState): boolean {
+  return !state.lost && state.supplies >= reinforceCost(state.walls.level)
+}
+
+/** Raises the walls: a higher maximum, and the new stretch comes built. */
+export function reinforceWalls(state: GameState): GameState {
+  if (!canReinforce(state)) return state
+  return {
+    ...state,
+    supplies: state.supplies - reinforceCost(state.walls.level),
+    walls: {
+      integrity: state.walls.integrity + WALL_REINFORCE_POINTS,
+      max: state.walls.max + WALL_REINFORCE_POINTS,
+      level: state.walls.level + 1,
+    },
+  }
 }

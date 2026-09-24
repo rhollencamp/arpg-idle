@@ -1,5 +1,5 @@
 import { advanceTo } from './tick'
-import type { Fallen, GameState, Report } from './types'
+import type { Fallen, GameState, Report, TownEvent } from './types'
 
 /** Absences shorter than this pass without a word. */
 export const MIN_AWAY_MS = 60_000
@@ -16,6 +16,13 @@ export interface AwaySummary {
   supplies: number
   /** Whether a team is still out there. */
   stillOut: boolean
+  /** Ledger lines written during the absence, oldest first. */
+  events: TownEvent[]
+  /** A wave on its way when you got back, if any. */
+  wave: { strength: number; countdown: number } | null
+  lightOut: boolean
+  /** The town fell while you were gone. */
+  lost: boolean
 }
 
 export function summarizeAbsence(
@@ -36,6 +43,10 @@ export function summarizeAbsence(
     oil: after.oil - before.oil,
     supplies: after.supplies - before.supplies,
     stillOut: after.expedition !== null,
+    events: after.townLog.filter((event) => event.t > before.elapsed),
+    wave: after.siege.wave,
+    lightOut: after.lightOut,
+    lost: after.lost !== null && before.lost === null,
   }
 }
 
@@ -64,6 +75,14 @@ export function formatDuration(ms: number): string {
     if (count >= 1) return `${count} ${name}${count === 1 ? '' : 's'}`
   }
   return 'a moment'
+}
+
+/** A longer span of sim time: `2h 05m`, or `4m` under an hour. */
+export function formatSpan(seconds: number): string {
+  const minutes = Math.max(0, Math.floor(seconds / 60))
+  const hours = Math.floor(minutes / 60)
+  if (hours === 0) return `${minutes}m`
+  return `${hours}h ${String(minutes % 60).padStart(2, '0')}m`
 }
 
 /** A clock reading for sim seconds: `4:05`. */

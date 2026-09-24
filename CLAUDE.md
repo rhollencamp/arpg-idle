@@ -15,7 +15,8 @@ npm run lint          # oxlint (not eslint)
 npm run format        # prettier --write .
 npm run format:check  # what CI runs
 npm run test          # vitest run
-npm run sim           # headless balance harness: npm run sim [runs]
+npm run sim           # expedition balance harness: npm run sim [runs]
+npm run sim:town      # town/siege survival harness with a bot player
 npm run icons         # re-render public/*.png from public/favicon.svg
 ```
 
@@ -35,12 +36,17 @@ script, CI/deploy) came from `rhollencamp/idle`.
 - `rules.ts`: **every tuning number**. `content.ts`: names and enemy kinds.
 - `expedition.ts`: one second of an expedition. Travel, tick-by-tick
   combat, retreat/turn-back decisions, survival checks, coming home.
-- `town.ts`: healing, the oil press, refugees arriving at the gate.
+- `town.ts`: the lighthouse (oil burn, going out and relighting), the
+  press, healing, refugees, and the siege (pressure, waves, walls, the
+  fall). `townStep` runs event to event: every rate is constant between
+  events (light out/relit, oil store full, wave sighted, wave breaks,
+  refugee arrives). It advances to the next event, handles it, and repeats.
+  A new town rule must either keep a constant rate between events or add
+  its own event. That's what makes one call over an hour equal 3,600
+  one-second calls.
 - `tick.ts`: `advanceTo(state, now)`. It runs whole one-second steps while
   an expedition is out. Once nobody is out, it settles the remaining time
-  in a single `townStep`. That's why every town rule must be a plain
-  accumulation with a cap: one call over an hour must equal 3,600
-  one-second calls.
+  in a single `townStep`. A fallen town (`state.lost`) stops simulating.
 - `actions.ts`: the player's moves, as pure `state → state` functions that
   return the same object when a move is refused.
 - `save.ts` (localStorage; `migrate` is the only compatibility seam),
@@ -59,8 +65,9 @@ structured `LogEvent`s, and all prose lives in `src/ui/logText.ts`.
   `refugeesArrived`. New systems take their own stream name.
 - **Save compatibility:** additive `GameState` changes get a default in
   `migrate`. Bumping `SAVE_VERSION` discards every save.
-- **Balance changes:** run `npm run sim` before and after. The harness is
-  how we check that policies still produce visibly different outcomes.
+- **Balance changes:** run `npm run sim` and `npm run sim:town` before and
+  after. They're how we check that policies still produce visibly different
+  outcomes, and how long towns survive under each play style.
 - **Base path:** the app is served from `/arpg-idle/`. `base` in
   `vite.config.ts` and the manifest's `start_url`/`scope` change together.
 - **Colour scheme:** the default is dark. The inline script in `index.html`

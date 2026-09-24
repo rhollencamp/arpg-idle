@@ -34,6 +34,30 @@ describe('migrate', () => {
     expect(migrate({ ...createInitialState(), roster: [{}] })).toBeNull()
   })
 
+  it('brings a save from before the light and the siege up to date', () => {
+    const {
+      refugeeProgress: _progress,
+      elapsed: _elapsed,
+      brightness: _brightness,
+      lightOut: _lightOut,
+      siege: _siege,
+      walls: _walls,
+      takenIn: _takenIn,
+      townLog: _townLog,
+      lost: _lost,
+      ...older
+    } = createInitialState()
+    const migrated = migrate({ ...older, refugeeClock: 240 })
+
+    expect(migrated).not.toBeNull()
+    expect(migrated?.refugeeProgress).toBeCloseTo(0.5)
+    expect(migrated?.brightness).toBe('steady')
+    expect(migrated?.siege.wave).toBeNull()
+    expect(migrated?.walls.integrity).toBe(100)
+    expect(migrated?.lost).toBeNull()
+    expect(migrated).not.toHaveProperty('refugeeClock')
+  })
+
   it('fills in a missing policy', () => {
     const { policy: _policy, ...older } = createInitialState()
 
