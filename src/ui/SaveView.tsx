@@ -23,7 +23,7 @@ interface SaveViewProps {
 type Status = { tone: 'ok' | 'error'; message: string } | null
 
 function saveFilename(now: Date): string {
-  return `last-lighthouse-${now.toISOString().slice(0, 10)}.json`
+  return `guttered-${now.toISOString().slice(0, 10)}.json`
 }
 
 /**

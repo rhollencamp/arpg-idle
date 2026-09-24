@@ -35,8 +35,8 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'The Last Lighthouse',
-        short_name: 'The Last Lighthouse',
+        name: 'Guttered',
+        short_name: 'Guttered',
         description:
           'An idle game: keep the last lighthouse burning and send your people into the fog.',
         theme_color: '#161d25',

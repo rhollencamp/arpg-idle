@@ -35,7 +35,7 @@ export function NavDrawer({
       onClose={onClose}
       position="left"
       size="16rem"
-      title="The Last Lighthouse"
+      title="Guttered"
       padding={0}
       // The drawer body carries its own padding on the title row only; the
       // links run full-bleed so their hover state reaches the edges.

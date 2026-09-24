@@ -1,4 +1,4 @@
-# The Last Lighthouse _(working title)_
+# Guttered
 
 An idle ARPG for the browser, installable as a PWA. A fog has swallowed the
 world. Your town gathers around the last lighthouse still burning. You recruit

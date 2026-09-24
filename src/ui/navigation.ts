@@ -4,7 +4,7 @@
  * (and ticking) behind whichever screen is showing.
  */
 export const VIEWS = [
-  { key: 'town', label: 'Town', title: 'The Last Lighthouse' },
+  { key: 'town', label: 'Town', title: 'Guttered' },
   { key: 'expedition', label: 'Expedition', title: 'Expedition' },
   { key: 'reports', label: 'Reports', title: 'Reports' },
   { key: 'save', label: 'Save', title: 'Save' },
@@ -15,7 +15,5 @@ export const VIEWS = [
 export type View = (typeof VIEWS)[number]['key']
 
 export function viewTitle(view: View): string {
-  return (
-    VIEWS.find((entry) => entry.key === view)?.title ?? 'The Last Lighthouse'
-  )
+  return VIEWS.find((entry) => entry.key === view)?.title ?? 'Guttered'
 }

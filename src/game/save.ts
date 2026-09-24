@@ -1,7 +1,7 @@
 import { DEFAULT_POLICY } from './rules'
 import { SAVE_VERSION, type GameState } from './types'
 
-const SAVE_KEY = `last-lighthouse:save:v${SAVE_VERSION}`
+const SAVE_KEY = `guttered:save:v${SAVE_VERSION}`
 
 function isNumber(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value)

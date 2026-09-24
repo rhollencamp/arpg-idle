@@ -1,5 +1,8 @@
 # Vision & Pillars
 
+**Title: _Guttered_.** When a flame gutters, it flickers and burns low just
+before it goes out. The setting is still the last lighthouse.
+
 ## Elevator pitch
 
 A fog has swallowed the world, and things live inside it. Your town is gathered

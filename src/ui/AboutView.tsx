@@ -19,7 +19,7 @@ export function AboutView() {
   return (
     <Stack gap="md">
       <Card withBorder padding="sm">
-        <Text fw={600}>The Last Lighthouse</Text>
+        <Text fw={600}>Guttered</Text>
         <Text size="sm" c="dimmed" mt={4}>
           A fog has swallowed the world, and something lives in it. Your town
           huddles around the last lighthouse still burning. Take in whoever
