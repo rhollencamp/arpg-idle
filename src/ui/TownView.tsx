@@ -1,26 +1,13 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Divider,
-  Group,
-  Progress,
-  Stack,
-  Text,
-} from '@mantine/core'
+import { Badge, Button, Card, Divider, Group, Stack, Text } from '@mantine/core'
 import { awayIds, canTakeIn, takeIn, turnAway } from '../game/actions'
-import {
-  GATE_CAP,
-  OIL_CAP,
-  OIL_SECONDS_PER_FLASK,
-  REFUGEE_SECONDS,
-  ROSTER_CAP,
-  TAKE_IN_COST,
-  maxHp,
-} from '../game/rules'
-import { formatClock } from '../game/summary'
+import { GATE_CAP, ROSTER_CAP, TAKE_IN_COST, maxHp } from '../game/rules'
+import { formatSpan } from '../game/summary'
+import { refugeeInterval } from '../game/town'
 import type { GameState } from '../game/types'
 import { CharacterRow } from './CharacterRow'
+import { LighthouseCard } from './LighthouseCard'
+import { SiegeCard } from './SiegeCard'
+import { TownLedger } from './TownLedger'
 import { statusOf } from './characterStatus'
 
 export function TownView({
@@ -33,10 +20,8 @@ export function TownView({
   onOpenExpedition: () => void
 }) {
   const away = awayIds(state)
-  const pressing = state.oil < OIL_CAP
-  const flaskProgress = (state.oil % 1) * 100
   const gateFull = state.gate.length >= GATE_CAP
-  const nextRefugee = REFUGEE_SECONDS - state.refugeeClock
+  const interval = refugeeInterval(state)
 
   return (
     <Stack gap="md">
@@ -57,36 +42,8 @@ export function TownView({
         </Card>
       )}
 
-      <Card withBorder padding={0}>
-        <Text fw={600} p="sm">
-          Stores
-        </Text>
-        <Divider />
-        <Stack gap="xs" p="sm">
-          <Group justify="space-between" align="baseline" wrap="nowrap">
-            <Text>Lantern oil</Text>
-            <Text ff="monospace">
-              {state.oil.toFixed(1)} / {OIL_CAP} flasks
-            </Text>
-          </Group>
-          <Progress.Root>
-            <Progress.Section
-              value={pressing ? flaskProgress : 100}
-              aria-label="Progress toward the next flask"
-            />
-          </Progress.Root>
-          <Text size="sm" c="dimmed">
-            {pressing
-              ? `The press fills a flask every ${formatClock(OIL_SECONDS_PER_FLASK)}.`
-              : 'The store is full. The press sits idle.'}
-          </Text>
-        </Stack>
-        <Divider />
-        <Group justify="space-between" align="baseline" p="sm" wrap="nowrap">
-          <Text>Supplies</Text>
-          <Text ff="monospace">{state.supplies}</Text>
-        </Group>
-      </Card>
+      <LighthouseCard state={state} apply={apply} />
+      <SiegeCard state={state} apply={apply} />
 
       <Card withBorder padding={0}>
         <Group justify="space-between" p="sm">
@@ -129,7 +86,11 @@ export function TownView({
         <Text size="sm" c="dimmed" p="sm">
           {gateFull
             ? 'The gate is crowded. Nobody else will come until you decide.'
-            : `Someone should see the light in about ${formatClock(nextRefugee)}.`}
+            : interval === null
+              ? 'Nobody can find the town while the light is out.'
+              : `Someone should see the light in about ${formatSpan(
+                  (1 - state.refugeeProgress) * interval,
+                )}.`}
           {state.roster.length >= ROSTER_CAP &&
             ' There is no room left in town.'}
         </Text>
@@ -162,6 +123,18 @@ export function TownView({
           </>
         )}
       </Card>
+
+      {state.townLog.length > 0 && (
+        <Card withBorder padding={0}>
+          <Text fw={600} p="sm">
+            Ledger
+          </Text>
+          <Divider />
+          <div style={{ padding: 'var(--mantine-spacing-sm)' }}>
+            <TownLedger events={state.townLog} limit={15} />
+          </div>
+        </Card>
+      )}
 
       {state.fallen.length > 0 && (
         <Card withBorder padding={0}>

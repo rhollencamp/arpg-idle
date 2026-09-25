@@ -1,5 +1,5 @@
 import { makeSeed } from './rng'
-import { DEFAULT_POLICY, maxHp } from './rules'
+import { DEFAULT_POLICY, WALL_START, maxHp } from './rules'
 import { SAVE_VERSION, type Character, type GameState } from './types'
 
 /** The first four who made it to the light. */
@@ -29,7 +29,7 @@ export function createInitialState(now: number = Date.now()): GameState {
       injured: false,
     })),
     gate: [],
-    refugeeClock: 0,
+    refugeeProgress: 0,
     refugeesArrived: 0,
     nextCharacterId: FOUNDERS.length + 1,
     fallen: [],
@@ -37,5 +37,13 @@ export function createInitialState(now: number = Date.now()): GameState {
     expedition: null,
     nextExpeditionId: 1,
     reports: [],
+    elapsed: 0,
+    brightness: 'steady',
+    lightOut: false,
+    siege: { pressure: 0, wave: null, waves: 0, repelled: 0 },
+    walls: { integrity: WALL_START, max: WALL_START, level: 1 },
+    takenIn: 0,
+    townLog: [],
+    lost: null,
   }
 }

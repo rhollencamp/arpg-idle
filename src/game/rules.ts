@@ -1,4 +1,4 @@
-import type { Character, Policy, Push, Stance } from './types'
+import type { Brightness, Character, Policy, Push, Stance } from './types'
 
 /**
  * Every tuning number in one place, so balancing is an edit to this file and
@@ -76,8 +76,25 @@ export const LIGHT_PER_FLASK = 90
 /** Seconds to walk from one node to the next, going out. */
 export const TRAVEL_SECONDS = 30
 
-/** Seconds per node of depth to walk home through ground already cleared. */
+/**
+ * Seconds per node of depth to walk home through ground already cleared,
+ * under a steady light. The lighthouse is what guides a team home: see
+ * `RETURN_PACE`.
+ */
 export const RETURN_SECONDS_PER_DEPTH = 10
+
+/**
+ * How fast a team walking home covers ground at each light level, as a
+ * share of the steady pace. In a dim light they lose their way; with it out,
+ * they grope home in the dark. Applied second by second, so turning the
+ * light up helps a team already on its way.
+ */
+export const RETURN_PACE: Readonly<Record<LightLevel, number>> = {
+  out: 0.5,
+  low: 0.67,
+  steady: 1,
+  bright: 1.25,
+}
 
 /**
  * HP a standing member gets back per second on the road between fights. A
@@ -112,13 +129,13 @@ export const OIL_SECONDS_PER_FLASK = 150
 /** The press stops once the store holds this much. Loot can carry it higher. */
 export const OIL_CAP = 20
 
-/** Seconds between refugees reaching the gate. */
-export const REFUGEE_SECONDS = 8 * 60
-
 /** Refugees who will wait at the gate at once. The clock stops while it is full. */
 export const GATE_CAP = 3
 
 export const ROSTER_CAP = 8
+
+/** Lines kept in the town's ledger. */
+export const MAX_TOWN_LOG = 60
 
 /** Supplies it costs to take a refugee in. */
 export const TAKE_IN_COST = 10
@@ -128,4 +145,106 @@ export function canBeSent(
   away: ReadonlySet<number>,
 ): boolean {
   return !away.has(character.id) && !character.injured && character.hp > 0
+}
+
+// ── The lighthouse ──────────────────────────────────────────────────────────
+
+/**
+ * How the light is burning. `out` is not a setting the player picks: it is
+ * what any setting becomes once the oil runs dry.
+ */
+export type LightLevel = Brightness | 'out'
+
+/** Flasks the lamp burns per second at each setting. */
+export const LIGHT_BURN_PER_SECOND: Readonly<Record<Brightness, number>> = {
+  low: 0.15 / 60,
+  steady: 0.3 / 60,
+  bright: 0.45 / 60,
+}
+
+/**
+ * Once the light has gone out it relights on its own when the press has put
+ * this much back in the store, so the lamp does not flicker on and off on
+ * every drop the press gives it.
+ */
+export const RELIGHT_AT = 1
+
+/** Seconds between refugees reaching the gate; `null` means nobody comes. */
+export const REFUGEE_SECONDS: Readonly<Record<LightLevel, number | null>> = {
+  out: null,
+  low: 12 * 60,
+  steady: 8 * 60,
+  bright: 5 * 60,
+}
+
+// ── The siege ───────────────────────────────────────────────────────────────
+
+/** Siege pressure that sets a wave in motion. */
+export const PRESSURE_MAX = 100
+
+/** Pressure gained per second under a steady light: a wave every 40 minutes. */
+export const PRESSURE_PER_SECOND = PRESSURE_MAX / (40 * 60)
+
+/**
+ * How fast the fog gathers at each light level. The light draws everything
+ * in, the things in the fog as surely as the survivors: the brighter it
+ * burns, the more often a wave comes.
+ */
+export const PRESSURE_MULTIPLIER: Readonly<Record<LightLevel, number>> = {
+  out: 0.6,
+  low: 0.6,
+  steady: 1,
+  bright: 1.6,
+}
+
+/**
+ * Seconds of warning between a wave being sighted and it breaking on the
+ * walls, set by the light at the moment it is sighted: a bright light shows
+ * it coming from far out in the fog. With the light out there is no warning
+ * at all — the wave is on the walls before anyone sees it.
+ */
+export const WAVE_WARNING_SECONDS: Readonly<Record<LightLevel, number>> = {
+  out: 0,
+  low: 10 * 60,
+  steady: 30 * 60,
+  bright: 50 * 60,
+}
+
+/**
+ * How hard a wave sighted `elapsed` seconds after the founding hits. Tied to
+ * the clock rather than to how many waves have come, so a dim light buys
+ * fewer fights, not easier ones.
+ */
+export function waveStrength(elapsed: number): number {
+  return Math.round(25 * 1.13 ** (elapsed / 3600))
+}
+
+/** Defense each wall point is worth. */
+export const WALL_DEFENSE_PER_POINT = 0.2
+
+/** How well defenders fight at each light level: they need to see. */
+export const LIGHT_DEFENSE: Readonly<Record<LightLevel, number>> = {
+  out: 0.75,
+  low: 0.9,
+  steady: 1,
+  bright: 1.15,
+}
+
+/** Share of a wave's strength the walls soak up even when it is thrown back. */
+export const WAVE_CHIP = 0.15
+
+/** Supplies scavenged from a wave that was thrown back, per point of strength. */
+export const WAVE_SPOILS = 0.25
+
+export const WALL_START = 100
+
+/** Wall points one supply repairs. */
+export const WALL_REPAIR_PER_SUPPLY = 3
+
+/** Wall points each reinforcement adds to the maximum (and to the wall). */
+export const WALL_REINFORCE_POINTS = 50
+
+/** Supplies to reinforce the walls from level `level` to the next. */
+export function reinforceCost(level: number): number {
+  return 30 * level
 }

@@ -4,6 +4,7 @@ import { useGameLoop } from './game/useGameLoop'
 import { AboutView } from './ui/AboutView'
 import { AppHeader } from './ui/AppHeader'
 import { ExpeditionView } from './ui/ExpeditionView'
+import { LostView } from './ui/LostView'
 import { NavDrawer } from './ui/NavDrawer'
 import { ReportsView } from './ui/ReportsView'
 import { ReturnSummary } from './ui/ReturnSummary'
@@ -65,14 +66,21 @@ function App() {
               flex={1}
               w="100%"
             >
-              {view === 'town' && (
+              {state.lost && (view === 'town' || view === 'expedition') && (
+                <LostView
+                  state={state}
+                  lost={state.lost}
+                  onRestart={resetGame}
+                />
+              )}
+              {!state.lost && view === 'town' && (
                 <TownView
                   state={state}
                   apply={apply}
                   onOpenExpedition={() => openView('expedition')}
                 />
               )}
-              {view === 'expedition' && (
+              {!state.lost && view === 'expedition' && (
                 <ExpeditionView
                   state={state}
                   apply={apply}

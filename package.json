@@ -15,7 +15,8 @@
     "format:check": "prettier --check .",
     "preview": "vite preview",
     "test": "vitest run",
-    "sim": "tsx scripts/sim.ts"
+    "sim": "tsx scripts/sim.ts",
+    "sim:town": "tsx scripts/town-sim.ts"
   },
   "dependencies": {
     "@mantine/core": "^9.6.0",

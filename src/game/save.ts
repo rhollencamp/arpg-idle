@@ -1,5 +1,11 @@
+import { createInitialState } from './initialState'
 import { DEFAULT_POLICY } from './rules'
-import { SAVE_VERSION, type GameState } from './types'
+import {
+  SAVE_VERSION,
+  type Brightness,
+  type GameState,
+  type Lost,
+} from './types'
 
 const SAVE_KEY = `guttered:save:v${SAVE_VERSION}`
 
@@ -28,7 +34,6 @@ export function migrate(raw: unknown): GameState | null {
     'lastTick',
     'oil',
     'supplies',
-    'refugeeClock',
     'refugeesArrived',
     'nextCharacterId',
     'nextExpeditionId',
@@ -62,10 +67,44 @@ export function migrate(raw: unknown): GameState | null {
     return null
   }
 
+  const fresh = createInitialState(state.lastTick as number)
+  // Retired in favour of `refugeeProgress`; read below, not carried over.
+  const { refugeeClock, ...current } = state
+
   return {
-    ...(state as unknown as GameState),
+    ...(current as unknown as GameState),
     policy: { ...DEFAULT_POLICY, ...(state.policy as object | undefined) },
+    // The light and the siege arrived after the first saves were written.
+    // Those towns pick them up from a standing start rather than being lost.
+    refugeeProgress: isNumber(state.refugeeProgress)
+      ? state.refugeeProgress
+      : isNumber(refugeeClock)
+        ? // The old clock counted seconds toward an eight-minute arrival.
+          Math.min(0.999, refugeeClock / (8 * 60))
+        : 0,
+    elapsed: isNumber(state.elapsed) ? state.elapsed : 0,
+    brightness: isBrightness(state.brightness) ? state.brightness : 'steady',
+    lightOut: state.lightOut === true,
+    siege: isObject(state.siege)
+      ? (state.siege as unknown as GameState['siege'])
+      : fresh.siege,
+    walls: isObject(state.walls)
+      ? (state.walls as unknown as GameState['walls'])
+      : fresh.walls,
+    takenIn: isNumber(state.takenIn) ? state.takenIn : 0,
+    townLog: Array.isArray(state.townLog)
+      ? (state.townLog as GameState['townLog'])
+      : [],
+    lost: isObject(state.lost) ? (state.lost as unknown as Lost) : null,
   }
+}
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isBrightness(value: unknown): value is Brightness {
+  return value === 'low' || value === 'steady' || value === 'bright'
 }
 
 export function loadState(create: () => GameState): GameState {

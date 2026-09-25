@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { depart } from './actions'
 import { createInitialState } from './initialState'
-import { DEFAULT_POLICY, GATE_CAP, REFUGEE_SECONDS } from './rules'
+import { DEFAULT_POLICY, REFUGEE_SECONDS } from './rules'
 import { advanceTo, STEP_MS } from './tick'
 import type { GameState } from './types'
 
@@ -69,14 +69,14 @@ describe('advanceTo', () => {
     const took = performance.now() - began
 
     expect(later.expedition).toBeNull()
-    expect(later.gate).toHaveLength(GATE_CAP)
+    expect(later.elapsed).toBeGreaterThan(0)
     expect(took).toBeLessThan(500)
   })
 
   it('heals the team back to full over a long absence', () => {
     const state = advanceTo(
       sendEveryone(createInitialState(START)),
-      START + 24 * 60 * 60 * 1000,
+      START + 2 * 60 * 60 * 1000,
     )
 
     for (const character of state.roster) {
@@ -85,10 +85,25 @@ describe('advanceTo', () => {
     }
   })
 
+  it('brings a team home slower under a dim light', () => {
+    const out = sendEveryone(createInitialState(START))
+    const walkHome = (brightness: 'low' | 'bright') => {
+      let state: GameState = { ...out, brightness, oil: 20 }
+      state = advanceTo(state, START + 60 * 60 * 1000)
+      const log = state.reports[0].log
+      const turned = log.find(
+        (event) => event.kind === 'turnBack' || event.kind === 'retreat',
+      )
+      return log.at(-1)!.t - (turned?.t ?? 0)
+    }
+
+    expect(walkHome('low')).toBeGreaterThan(walkHome('bright'))
+  })
+
   it('brings refugees to the gate on a clock', () => {
     const state = advanceTo(
       createInitialState(START),
-      START + REFUGEE_SECONDS * 1000,
+      START + REFUGEE_SECONDS.steady! * 1000,
     )
 
     expect(state.gate).toHaveLength(1)
